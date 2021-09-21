@@ -1,0 +1,323 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{courier}
+\usepackage{textcomp}
+\usepackage{indentfirst}
+
+\title{SMDO group environment setup guideline}
+\author{Yicong Fu}
+\date{August 2021}
+
+\begin{document}
+
+\maketitle
+
+This document covers steps to install the software developed by the group on
+a linux machine (Ubuntu 20.04 LTS).
+
+\section{Prerequisite software and libraries}
+
+The following list contains the basic software and libraries you'll need
+to have in your machine. Note that for lab's desktops you will not have the
+sudo (superuser) privilege, so you'll need to contact IT support
+(support@ae.gatech.edu) to install them for you.
+
+\begin{itemize}
+    \item GNU Make (\texttt{sudo apt install make})
+    \item CMake (\texttt{sudo apt install cmake})
+    \item GNU C++ compiler (\texttt{sudo apt install g++})
+    \item MPI C++ compiler (\texttt{sudo apt install openmpi-bin})
+    \item Linear algebra libraries: BLAS/LAPACK
+
+    (\texttt{sudo apt install libblas-dev liblapack-dev})
+
+    \item Python package installer: (\texttt{sudo apt install python3-pip})
+    \item numpy, mpi4py, Cython: (\texttt{pip3 install numpy mpi4py Cython})
+    \item Paraview (\texttt{sudo apt install paraview})
+
+\end{itemize}
+\section{TACS}
+
+This sections shows how to install the finite element code TACS.
+
+\begin{itemize}
+    \item Repository: \href{https://github.com/smdogroup/tacs}{https://github.com/smdogroup/tacs}
+    \item Documentation: \href{https://smdogroup.github.io/tacs/}{https://smdogroup.github.io/tacs/}
+\end{itemize}
+
+\subsection{Installation}
+
+\begin{enumerate}
+    \item Clone the repository. The group's convention is to download it to
+    \texttt{\$HOME/git/}:
+
+    \texttt{git clone git@github.com:smdogroup/tacs.git}
+
+    \item Switch to develop branch:
+
+    \texttt{git checkout develop}
+
+    \item Download and install METIS:
+
+    \texttt{cd \$HOME/git/tacs/extern}
+
+    \texttt{wget http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/metis-5.1.0.tar.gz}
+
+    \texttt{tar -xzf metis-5.1.0.tar.gz}
+
+    \texttt{cd metis-5.1.0}
+
+    \texttt{make config prefix=\$HOME/git/tacs/extern/metis/ CFLAGS="-fPIC"}
+
+    \texttt{make install}
+
+    \item Create \texttt{Makefile.in} file (and customize it, if needed):
+
+    \texttt{cd \$HOME/git/tacs \&\& cp Makefile.in.info Makefile.in}
+
+    \item Compile TACS and python wrapper:
+
+    \texttt{make \&\& make interface}
+
+    \item Set up \texttt{\$PYTHONPATH} for the python wrapper, add the following line to \texttt{\texttildelow/.bashrc}:
+
+    \texttt{export PYTHONPATH=\$\string{PYTHONPATH\string}:\texttildelow/git/tacs}
+
+    \item Then, run \texttt{source \texttildelow/.bashrc}
+
+\end{enumerate}
+
+\subsection{Test}
+
+Examples in \texttt{tacs/examples} can be used to test if TACS (and python wrapper) was built
+successfully. For example, you can run
+
+\texttt{cd \texttildelow/git/tacs/examples/triangle \&\& python3 triangle.py}
+
+if it runs, then TACS has been installed properly.
+
+\section{ParOpt}
+
+This section shows how to intall ParOpt, the parallel gradient-based optimizer.
+
+\begin{itemize}
+    \item Repository: \href{https://github.com/smdogroup/paropt}{https://github.com/smdogroup/paropt}
+    \item Documentation: \href{https://smdogroup.github.io/paropt/}{https://smdogroup.github.io/paropt/}
+\end{itemize}
+
+\subsection{Dependencies}
+
+ParOpt would need MPI, numpy, mpi4py, cython and BLAS/LAPACK. But if you already
+installed TACS then no extra packages are needed.
+
+\subsection{Installation}
+
+\begin{enumerate}
+
+    \item Clone the repository. The group's convention is to download it to
+    \texttt{\$HOME/git/}:
+
+    \texttt{git clone git@github.com:smdogroup/paropt.git}
+
+    \item Create \texttt{Makefile.in} file (and customize it, if needed):
+
+    \texttt{cp Makefile.in.info Makefile.in}
+
+    \item Compile ParOpt and python wrapper:
+
+    \texttt{cd \$HOME/git/paropt \&\& make \&\& make interface}
+
+    \item Set up \texttt{\$PYTHONPATH} for the python wrapper, add the following line to \texttt{\texttildelow/.bashrc}:
+
+    \texttt{export PYTHONPATH=\$\string{PYTHONPATH\string}:\texttildelow/git/paropt}
+
+    \item Then, run \texttt{source \texttildelow/.bashrc}
+
+\end{enumerate}
+
+\subsection{Test}
+
+You could run \texttt{\texttildelow/git/paropt/examples/rosenbrock/rosenbrock.py} to test if the installation succeeded.
+
+\section{TMR}
+
+This section covers steps to install TMR, the mesh refinement tool.
+
+\begin{itemize}
+    \item Repository: \href{https://github.com/smdogroup/tmr}{https://github.com/smdogroup/tmr}
+    \item Documentation: \href{https://smdogroup.github.io/tmr/}{https://smdogroup.github.io/tmr/}
+\end{itemize}
+
+\subsection{Download the code}
+
+\begin{enumerate}
+    \item
+    Clone the repository. The group's convention is to download it to \texttt{\$HOME/git/}:
+
+    \texttt{git clone git@github.com:smdogroup/tmr.git}
+
+    \item
+    Create and modify \texttt{Makefile.in} file:
+
+    \texttt{cp Makefile.in.info Makefile.in}
+
+    Then comment out the last three lines regarding the netgen libraries.
+
+\end{enumerate}
+
+\subsection{Dependencies}
+
+You need to install the following dependencies before installing TMR.
+
+\begin{itemize}
+    \item TACS, ParOpt
+
+    \item Blossom V
+
+    \begin{enumerate}
+        \item Download the package to \texttt{tmr/extern}:
+
+        \texttt{cd \$HOME/git/tmr/extern}
+
+        \texttt{wget https://pub.ist.ac.at/\texttildelow vnk/software/blossom5-v2.05.src.tar.gz}
+
+        \texttt{tar -zxf blossom5-v2.05.src.tar.gz}
+
+        \item Compile:
+
+        \texttt{cd blossom5-v2.05.src}
+
+        \texttt{cp ../Makefile-blossom5 Makefile \&\& make \&\& make lib}
+
+    \end{enumerate}
+
+    \item OpenCASCADE
+
+    \begin{enumerate}
+        \item Create the directory for packages:
+
+        \texttt{mkdir \$HOME/packages \&\& cd \$HOME/packages}
+
+        \item Download OpenCASCADE:
+
+        \texttt{wget https://acdl.mit.edu/ESP/OCC741lin64.tgz}
+
+        \texttt{tar -zxf OCC741lin64.tgz}
+
+        \texttt{mv OpenCASCADE-7.4.1/ OpenCASCADE}
+
+        \item Add the following lines to \texttt{\texttildelow/.bashrc}
+
+        \texttt{export CASROOT=\$HOME/packages/OpenCASCADE}
+
+        \texttt{export CASARCH=}
+
+        \texttt{export PATH=\$CASROOT/bin:\$PATH}
+
+        \texttt{export LD\string_LIBRARY\string_PATH=\$LD\string_LIBRARY\string_PATH:\$CASROOT/lib}
+
+        \item Then, run \texttt{source \texttildelow/.bashrc}
+
+        \item Add the following values to \texttt{TMR\string_DEBUG\string_FLAGS} and
+        \texttt{TMR\string_FLAGS} in \texttt{\$HOME/git/tmr/Makefile.in}:
+
+        \texttt{-DTMR\string_HAS\string_OPENCASCADE -DTMR\string_HAS\string_EGADS
+        -DTMR\string_HAS\string_PAROPT}
+
+
+    \end{enumerate}
+
+    \item egads4py
+
+    \begin{enumerate}
+        \item Clone the repository to \texttt{\$HOME/git}:
+
+        \texttt{cd \$HOME/git \&\& git clone git@github.gatech.edu:gkennedy9/egads4py.git}
+
+        \item Copy over \texttt{Makefile.in.info} to \texttt{Makefile.in}
+
+        \item Compile:
+
+        \texttt{make}
+        \texttt{make interface}
+
+        \item Set up \texttt{\$PYTHONPATH} for the python wrapper,
+        add the following line to \texttt{\texttildelow/.bashrc}:
+
+        \texttt{export PYTHONPATH=\$\string{PYTHONPATH\string}:\texttildelow/git/egads4py}
+
+        \item Then, run \texttt{source \texttildelow/.bashrc}
+
+    \end{enumerate}
+
+\end{itemize}
+
+
+\subsection{Installation}
+
+\begin{enumerate}
+
+    \item Add the following lines to \texttt{\$\texttildelow/.bashrc}:
+
+    \texttt{export TACS\string_DIR=\$HOME/git/tacs}
+
+    \texttt{export PAROPT\string_DIR=\$HOME/git/paropt}
+
+    \texttt{export EGADS\string_DIR=\$HOME/git/egads4py}
+
+    \item Then, run \texttt{source \texttildelow/.bashrc}
+
+    \item Compile the code and python wrapper:
+
+    \texttt{cd \$HOME/git/tmr \&\& make \&\& make interface}
+
+    \item Set up \texttt{\$PYTHONPATH} for the python wrapper,
+    add the following line to \texttt{\texttildelow/.bashrc}:
+
+    \texttt{export PYTHONPATH=\$\string{PYTHONPATH\string}:\texttildelow/git/tmr}
+
+    \item Then, run \texttt{source \texttildelow/.bashrc}
+
+\end{enumerate}
+
+\subsection{Test}
+
+You could run \texttt{\texttildelow/git/tmr/examples/egads/cylinder/cylinder.py} to test if the installation succeeded.
+
+\section{Miscellaneous}
+
+Some commands and resources that might be useful.
+
+\begin{itemize}
+    \item Remote access to lab's desktop
+
+    You can use the following command to ssh into your PC in the office:
+
+    \texttt{ssh -J your-GTID@ssh.ae.gatech.edu your-GTID@AE-SMDO-XXXXXX.ae.gatech.edu}
+
+    where \texttt{XXXXXX} is the machine number that can be found on your PC case.
+
+    \item PACE training series
+
+    PACE has a series of training sessions on git, linux, and PACE cluster (that has thousands of nodes
+    and is we run very large jobs).
+    If you want to get yourself familiar with those topics, you could
+    check the following website for more details:
+
+    \href{https://pace.gatech.edu/training}{https://pace.gatech.edu/training}
+
+    \item The-Missing-Semester-Of-Your-CS-Education
+
+    A short course by MIT that covers many useful topics about the tools for developers,
+    including shell, command line environment, git, and so on:
+
+    \href{https://missing.csail.mit.edu/}{https://missing.csail.mit.edu/}
+
+\end{itemize}
+
+
+
+
+\end{document}

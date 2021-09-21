@@ -1,0 +1,1 @@
+sudo apt install make cmake g++ openmpi-bin libblas-dev liblapack-dev python3-pip paraview
