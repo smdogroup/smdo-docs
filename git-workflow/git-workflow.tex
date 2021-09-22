@@ -72,6 +72,12 @@ commands in the project folder in terminal:
 
 The commands above essentially write to a repo specific configuration file \texttt{project-folder/.git/config}.
 
+Another thing you'll need to do is to run:
+
+\texttt{git config --global pull.ff only}
+
+This will prevent some issues when pulling.
+
 \subsection{The [fork]-[develop]-[pull request] work flow}
 
 Using this workflow, everyone will have a ``forked'' repository under their own GitHub account,
