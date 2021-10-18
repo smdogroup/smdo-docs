@@ -87,12 +87,8 @@ This sections shows how to install the finite element code TACS.
 
 \subsection{Test}
 
-Examples in \texttt{tacs/examples} can be used to test if TACS (and python wrapper) was built
-successfully. For example, you can run
-
-\texttt{cd \texttildelow/git/tacs/examples/triangle \&\& python3 triangle.py}
-
-if it runs, then TACS has been installed properly.
+TACS uses testflo (which could be installed by pip) for unit testing.
+To run the tests, execute \texttt{testflo .} in the root folder.
 
 \section{ParOpt}
 
@@ -135,7 +131,7 @@ installed TACS then no extra packages are needed.
 
 \subsection{Test}
 
-You could run \texttt{\texttildelow/git/paropt/examples/rosenbrock/rosenbrock.py} to test if the installation succeeded.
+You may want to run \texttt{\texttildelow/git/paropt/examples/rosenbrock/rosenbrock.py} to test if the installation succeeded.
 
 \section{TMR}
 
@@ -281,7 +277,8 @@ You need to install the following dependencies before installing TMR.
 
 \subsection{Test}
 
-You could run \texttt{\texttildelow/git/tmr/examples/egads/cylinder/cylinder.py} to test if the installation succeeded.
+TMR uses testflo for unit testing.
+To execute the test, run \texttt{testflo .} in the root folder.
 
 \section{Miscellaneous}
 
